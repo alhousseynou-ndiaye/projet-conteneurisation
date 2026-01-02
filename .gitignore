@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# DB
+*.db
+
+# Logs
+*.log
+
+# Node (si tu ajoutes plus tard)
+node_modules/
+dist/

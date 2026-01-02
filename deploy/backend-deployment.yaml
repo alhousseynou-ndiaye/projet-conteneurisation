@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etl-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etl-backend
+  template:
+    metadata:
+      labels:
+        app: etl-backend
+    spec:
+      containers:
+        - name: backend
+          image: etl-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: etl-config
+            - secretRef:
+                name: etl-secrets
+          volumeMounts:
+            - name: sqlite-volume
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: sqlite-volume
+          persistentVolumeClaim:
+            claimName: sqlite-pvc

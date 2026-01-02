@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etl-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etl-frontend
+  template:
+    metadata:
+      labels:
+        app: etl-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: etl-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
