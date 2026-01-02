@@ -1,15 +1,12 @@
 # Python
+.venv/
 __pycache__/
 *.pyc
-.venv/
+
+# Local files
+*.db
 .env
 
-# DB
-*.db
-
-# Logs
-*.log
-
-# Node (si tu ajoutes plus tard)
-node_modules/
-dist/
+# OS / IDE
+.vscode/
+.DS_Store
