@@ -1,0 +1,55 @@
+name: CD (tag -> deploy to k8s)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set image names
+        shell: bash
+        run: |
+          echo "BACKEND_IMAGE=ghcr.io/${{ github.repository }}/etl-backend:${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "FRONTEND_IMAGE=ghcr.io/${{ github.repository }}/etl-frontend:${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Build & Push backend
+        run: |
+          docker build -t $env:BACKEND_IMAGE ./backend
+          docker push $env:BACKEND_IMAGE
+
+      - name: Build & Push frontend
+        run: |
+          docker build -t $env:FRONTEND_IMAGE ./frontend
+          docker push $env:FRONTEND_IMAGE
+
+      - name: Deploy manifests
+        run: |
+          kubectl apply -f deploy/
+
+      - name: Update images in deployments
+        run: |
+          kubectl set image deployment/etl-backend backend=$env:BACKEND_IMAGE
+          kubectl set image deployment/etl-frontend frontend=$env:FRONTEND_IMAGE
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/etl-backend
+          kubectl rollout status deployment/etl-frontend
