@@ -43,16 +43,6 @@ Ce projet met en œuvre :
   - SQLite
   - Persistée via un **Persistent Volume Kubernetes**
 
-### Schéma simplifié
-
-Utilisateur
-↓
-Frontend (Nginx)
-↓
-Backend (FastAPI)
-↓
-SQLite (PVC Kubernetes)
-
 ---
 
 ## 🧰 Technologies utilisées
