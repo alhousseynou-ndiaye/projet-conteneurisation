@@ -3,7 +3,6 @@
 ## 👤 Auteur
 
 - Nom : Alhousseynou Ndiaye
-- Profil : Étudiant / Débutant DevOps
 
 ---
 
