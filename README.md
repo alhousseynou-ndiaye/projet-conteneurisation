@@ -149,3 +149,7 @@ mettre en place un pipeline CI/CD fonctionnel
 
 apprendre à expliquer et justifier des choix techniques
 ```
+
+
+
+#https://api.open-meteo.com/v1/forecast?latitude=48.8566&longitude=2.3522&current_weather=true
